@@ -1,5 +1,6 @@
-hex.devMode = true;
-hex.size = 50;
+hex.devMode = false;
+hex.tileSize = 50;
+hex.mapSize = 14;
 
 // Tempoary, shows colours.
 hex.iteration = 0;
