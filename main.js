@@ -152,32 +152,5 @@ document.addEventListener('DOMContentLoaded', function() {
 	radius = 4;
     map = new Map(radius);
     _.each(map.tiles, drawTile);
-
-	// You can only draw one line right now, will update.
-	document.getElementById('draw_line').addEventListener('click', function() {
-		_(tiles).each(function(yTiles, i) {
-			_(yTiles).each(function(tile, j) {
-				tile.addEventListener('click', function() {
-					hexClick(i, j, tile);
-				});
-			});
-		});
-		var start, end;
-		function hexClick(x, y, tile) {
-			if (!start) {
-				start = [x, y, tile];
-			} else {
-				end = [x, y, tile];
-				var line = drawLine([
-					{x: start[0], y: start[1]},
-					{x: end[0], y: end[1]}
-				]);
-
-				line.forEach(function(v) {
-					tiles[v.x][v.y].style.fill = "#C0C";
-				});
-			}
-		}
-	});
 });
 
