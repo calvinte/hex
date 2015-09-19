@@ -12,7 +12,7 @@ window.Tile = (function() {
         this.coordinate = coordinate;
 
         // Bounds.
-        if (!map.withinBoundaries(this.coordinate)) {
+        if (!coordinate.withinBoundaries()) {
             throw new Error('Out of bounds.');
         }
 

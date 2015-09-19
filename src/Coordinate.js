@@ -1,17 +1,24 @@
 Coordinate = (function() {
     Coordinate.prototype = {
         axes: ['w', 'x', 'y'],
+        withinBoundaries: function() {
+            return _(this.axes).every(function(v) { return Math.abs(this[v]) < this.map.radius; }, this);
+        },
     };
-    function Coordinate(coordinate) {
+    function Coordinate(coordinate, map) {
         var missingAxis;
         var _coordinate = _(coordinate);
         var coordinateLength = _coordinate.size();
+        this.map = map;
 
+        //console.log(coordinate);
         _(coordinate).each(function(v, k) {
-            var direction = v > 0;
+            var direction = v > 0 ? 1 : -1;
             var wholeAbs = Math.floor(Math.abs(v));
-            coordinate[k] = (direction ? 1 : -1) * wholeAbs;
+            coordinate[k] = direction * (wholeAbs % map.radius);
         });
+        //console.log(coordinate);
+        //console.log("\n");
 
         // Ensure at least two axes were provided.
         if (coordinateLength < 2) {

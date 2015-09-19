@@ -1,9 +1,8 @@
 // Note: this is all garbage. I'll clean it up later.
 // tiles[x][y];
-var tiles = {};
-var startX = window.innerWidth/2;
-var startY = window.innerHeight/2;
+var tileElements = [];
 var element, paper, radius, map;
+var tileRadius = 50;
 
 function getAxes() {
 	return Coordinate.prototype.axes;
@@ -104,10 +103,10 @@ function drawLine(coordinates) {
 	return coordinatesInLine;
 }
 
-function drawTile(tile) {
+function renderTile(tile) {
 	var points = [],
 	    sides = 6,
-	    radius = 50,
+	    radius = tileRadius,
 	    plotX, plotY;
 
 	plotX = startX + (radius * Math.sqrt(3) * (tile.coordinate.x + tile.coordinate.w/2));
@@ -134,15 +133,74 @@ function drawTile(tile) {
 		.attr('y', plotY)
 		.text('w: ' + tile.coordinate.w + ', x: ' + tile.coordinate.x + ', y: ' + tile.coordinate.y);
 
-	tiles[tile.coordinate.x] = tiles[tile.coordinate.x] || {};
-	tiles[tile.coordinate.x][tile.coordinate.y] = hexElement[0][0];
+    tileElements.push(hexElement[0][0]);
 };
-
 
 function degToRad(x) {
 	return x / 180 * Math.PI;
 }
 
+function distancePixels(A, B) {
+    return Math.pow(A[0] - B[0], 2) + Math.pow(A[1] - B[1], 2);
+};
+
+function tileWidth() {
+    return Math.sin(degToRad(60))*tileRadius
+}
+
+function tileHeight() {
+    return tileRadius*2 - Math.cos(degToRad(60))*tileRadius
+}
+
+function windowCenter() {
+    return [window.innerWidth/2, window.innerHeight/2];
+}
+
+function tileElementPosition(tileElement) {
+    var bounds = tileElement.getBoundingClientRect();
+    return [bounds.left + bounds.width/2, bounds.top + bounds.height/2];
+}
+
+var mirrorTable = new Array(6);
+
+function renderMap() {
+    var center = windowCenter(), centerTileElement, centerTilePosition;
+    if (!tileElements.length) {
+        startX = center[0];
+        startY = center[1];
+        _.each(map.tiles, renderTile);
+        console.log(startX, startY);
+    } else {
+        centerTileElement = _.reduce(tileElements, function(centerTileElement, tileElement) {
+            if (distancePixels(center, tileElementPosition(tileElement)) < distancePixels(center, tileElementPosition(centerTileElement))) {
+                return tileElement;
+            } else {
+                return centerTileElement;
+            }
+        });
+        centerTilePosition = tileElementPosition(centerTileElement);
+        startX = centerTilePosition[0];
+        startY = centerTilePosition[1];
+        //console.log(startX, startY);
+        var xStart = -1*Math.ceil(center[0]/tileWidth());
+        var yStart = -1*Math.ceil(center[1]/tileHeight());
+        //console.log(xStart, yStart);
+        element.remove();
+        element = paper.append('g').attr('id', 'hex-map');
+        for (var x = xStart; x < Math.abs(xStart)*2; x++) {
+            for (var y = yStart; y < Math.abs(yStart)*2; y++) {
+                //console.log(new Coordinate({x:x,y:y}, map));
+                renderTile(map.getTile(new Coordinate({x:x,y:y}, map)));
+            }
+        }
+        //Map.getTile({x:xStart,y:yStart});
+        //_.each(map.tiles, renderTile);
+        //console.log(map.tiles);
+    }
+    //console.log(startX, startY);
+}
+
+var startX, startY;
 document.addEventListener('DOMContentLoaded', function() {
 	paper = d3.select('body')
 		.append('svg')
@@ -151,6 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
     element = paper.append('g').attr('id', 'hex-map');
 	radius = 4;
     map = new Map(radius);
-    _.each(map.tiles, drawTile);
+    renderMap();
+    setTimeout(renderMap, 100);
 });
 
