@@ -1,0 +1,6 @@
+function Tile() {
+};
+
+Tile.prototype = {
+};
+
