@@ -5,7 +5,6 @@ var app = express();
 app.use(express.static('src'));
 app.use(express.static('sample'));
 app.use(express.static('node_modules'));
-app.use('/spec', express.static('spec'));
 
 app.get('/', function(req, res) {
     res.status(200).send(fs.readFileSync('sample/demo.html', 'utf8'));
