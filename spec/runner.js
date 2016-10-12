@@ -70,38 +70,42 @@ describe('Hex', function() {
             // As they are out-of-bounds, they get resolved to the proper
             // coordinate to mimic "wraparound".
             // @see http://www.redblobgames.com/grids/hexagons/#wraparound
-            assert.deepEqual(map.resolveTile( 0,  3, -3), [ 2, -2,  0]); // Corner
-            assert.deepEqual(map.resolveTile(-1,  3, -2), [ 1, -2,  1]);
-            assert.deepEqual(map.resolveTile(-2,  3, -1), [ 0, -2,  2]);
-            assert.deepEqual(map.resolveTile(-3,  3,  0), [ 2,  0, -2]); // Corner
-            assert.deepEqual(map.resolveTile(-3,  2,  1), [ 2, -1, -1]);
-            assert.deepEqual(map.resolveTile(-3,  1,  2), [ 2, -2,  0]);
-            assert.deepEqual(map.resolveTile(-3,  0,  3), [ 0,  2, -2]); // Corner
-            assert.deepEqual(map.resolveTile(-2, -1,  3), [ 1,  1, -2]);
-            assert.deepEqual(map.resolveTile(-1, -2,  3), [ 2,  0, -2]);
-            assert.deepEqual(map.resolveTile( 0, -3,  3), [-2,  2,  0]); // Corner
-            assert.deepEqual(map.resolveTile( 1, -3,  2), [-1,  2, -1]);
-            assert.deepEqual(map.resolveTile( 2, -3,  1), [ 0,  2, -2]);
-            assert.deepEqual(map.resolveTile( 3, -3,  0), [-2,  0,  2]); // Corner
-            assert.deepEqual(map.resolveTile( 3, -2, -1), [-2,  1,  1]);
-            assert.deepEqual(map.resolveTile( 3, -1, -2), [-2,  2,  0]);
-            assert.deepEqual(map.resolveTile( 3,  0, -3), [ 0, -2,  2]); // Corner
-            assert.deepEqual(map.resolveTile( 2,  1, -3), [-1, -1,  2]);
-            assert.deepEqual(map.resolveTile( 1,  2, -3), [-2,  0,  2]);
+            assert.deepEqual(map.resolveTile(0, 3), [2, -2, 0]); // Corner
+            assert.deepEqual(map.resolveTile(-1, 3), [1, -2, 1]);
+            assert.deepEqual(map.resolveTile(-2, 3), [0, -2, 2]);
+            assert.deepEqual(map.resolveTile(-3, 3), [2, 0, -2]); // Corner
+            assert.deepEqual(map.resolveTile(-3, 2), [2, -1, -1]);
+            assert.deepEqual(map.resolveTile(-3, 1), [2, -2, 0]);
+            assert.deepEqual(map.resolveTile(-3, 0), [0, 2, -2]); // Corner
+            assert.deepEqual(map.resolveTile(-2, -1), [1, 1, -2]);
+            assert.deepEqual(map.resolveTile(-1, -2), [2, 0, -2]);
+            assert.deepEqual(map.resolveTile(0, -3), [-2, 2, 0]); // Corner
+            assert.deepEqual(map.resolveTile(1, -3), [-1, 2, -1]);
+            assert.deepEqual(map.resolveTile(2, -3), [0, 2, -2]);
+            assert.deepEqual(map.resolveTile(3, -3), [-2, 0,  2]); // Corner
+            assert.deepEqual(map.resolveTile(3, -2), [-2, 1, 1]);
+            assert.deepEqual(map.resolveTile(3, -1), [-2, 2, 0]);
+            assert.deepEqual(map.resolveTile(3, 0), [0, -2,  2]); // Corner
+            assert.deepEqual(map.resolveTile(2, 1), [-1, -1, 2]);
+            assert.deepEqual(map.resolveTile(1, 2), [-2, 0, 2]);
 
             // Some tiles further outside the perimiter.
-            assert.deepEqual(map.resolveTile( 0,  4, -4), [ 2, -1, -1]);
-            assert.deepEqual(map.resolveTile(-2,  4, -2), [ 0, -1,  1]);
-            assert.deepEqual(map.resolveTile(-4,  3,  1), [ 1,  0, -1]);
-            assert.deepEqual(map.resolveTile( 1, -4,  3), [-1,  1,  0]);
-            assert.deepEqual(map.resolveTile( 4, -1, -3), [-1,  2, -1]);
-            assert.deepEqual(map.resolveTile( 2,  2, -4), [-1,  0,  1]);
+            assert.deepEqual(map.resolveTile(0, 4), [2, -1, -1]);
+            assert.deepEqual(map.resolveTile(-2, 4), [0, -1, 1]);
+            assert.deepEqual(map.resolveTile(-4, 3), [ 1, 0, -1]);
+            assert.deepEqual(map.resolveTile(1, -4), [-1, 1, 0]);
+            assert.deepEqual(map.resolveTile(4, -1), [-1, 2, -1]);
+            assert.deepEqual(map.resolveTile(2, 2), [-1, 0, 1]);
 
             // Even further...
-            assert.deepEqual(map.resolveTile(  0,   5,  -5), [ 2,  0, -2]);
-            assert.deepEqual(map.resolveTile(  0,   6,  -6), [-1, -1,  2]);
-            assert.deepEqual(map.resolveTile(  0,   9,  -9), [-1,  2, -1]);
-            assert.deepEqual(map.resolveTile(  0,  13, -13), [ 1,  1, -2]);
+            assert.deepEqual(map.resolveTile(0, 5), [ 2, 0, -2]);
+            assert.deepEqual(map.resolveTile(0, 6), [-1, -1, 2]);
+            assert.deepEqual(map.resolveTile(0, 9), [-1, 2, -1]);
+            assert.deepEqual(map.resolveTile(0, 13), [ 1, 1, -2]);
+
+            // All axis out-of-bounds.
+            assert.deepEqual(map.resolveTile(4, 9), [0, 0, 0]);
+            assert.deepEqual(map.resolveTile(4, 5), [-2, 1, 1]);
 
             done();
         });
