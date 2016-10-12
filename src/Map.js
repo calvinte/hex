@@ -14,51 +14,83 @@ define([], function() {
         // @note two of [q, r, s] required
         // @note when all parameters provided: (q + r + s === 0)
         resolveTile: function(q, r, s) {
+            var resolution = null;
             var position = this.completeTile(q, r, s);
 
-            if (position[0] < -this.radius && position[1] > this.radius) {
-                console.log(0);
-                position = this.resolveTile(
-                    position[0] + this.radius * 2 + 1,
-                    position[1] + this.radius * -1 - 1
-                );
-            } else if (position[0] < -this.radius && position[2] > this.radius) {
-                console.log(1);
-                position = this.completeTile(
-                    position[0] + this.radius + 1,
-                    null,
-                    position[2] + this.radius * -2 - 1
-                );
-            } else if (position[1] < -this.radius && position[0] > this.radius) {
-                console.log(2);
-                position = this.resolveTile(
-                    position[0] + this.radius * -2 - 1,
-                    position[1] + this.radius + 1
-                );
-            } else if (position[1] < -this.radius && position[2] > this.radius) {
-                console.log(3);
-                position = this.resolveTile(
-                    null,
-                    position[1] + this.radius * 2 + 1,
-                    position[2] + this.radius * -1 - 1
-                );
-            } else if (position[2] < -this.radius && position[0] > this.radius) {
-                console.log(4);
-                position = this.resolveTile(
-                    position[0] + this.radius * -1 - 1,
-                    null,
-                    position[2] + this.radius * 2 + 1
-                );
-            } else if (position[2] < -this.radius && position[1] > this.radius) {
-                console.log(5);
-                position = this.resolveTile(
-                    null,
-                    position[1] + this.radius * -2 - 1,
-                    position[2] + this.radius + 1
-                );
+            if (Math.abs(position[0]) > this.radius || Math.abs(position[1]) > this.radius || Math.abs(position[2]) > this.radius) {
+                resolution = [null, null, null];
+
+                if (position[0] < -this.radius && position[1] > this.radius) {
+                    // [MIN, MAX, X]
+                    resolution[0] = position[0] + this.radius * 2 + 1,
+                    resolution[1] = position[1] + this.radius * -1 - 1
+                } else if (position[0] < -this.radius && position[2] > this.radius) {
+                    // [MIN, X, MAX]
+                    resolution[0] = position[0] + this.radius + 1,
+                    resolution[2] = position[2] + this.radius * -2 - 1
+                } else if (position[1] < -this.radius && position[0] > this.radius) {
+                    // [MAX, MIN, X]
+                    resolution[0] = position[0] + this.radius * -2 - 1,
+                    resolution[1] = position[1] + this.radius + 1
+                } else if (position[1] < -this.radius && position[2] > this.radius) {
+                    // [X, MIN, MAX]
+                    resolution[1] = position[1] + this.radius * 2 + 1,
+                    resolution[2] = position[2] + this.radius * -1 - 1
+                } else if (position[2] < -this.radius && position[0] > this.radius) {
+                    // [MAX, X, MIN]
+                    resolution[0] = position[0] + this.radius * -1 - 1,
+                    resolution[2] = position[2] + this.radius * 2 + 1
+                } else if (position[2] < -this.radius && position[1] > this.radius) {
+                    // [X, MAX, MIN]
+                    resolution[1] = position[1] + this.radius * -2 - 1,
+                    resolution[2] = position[2] + this.radius + 1
+                } else if (position[0] > this.radius) {
+                    // [MAX, X, X]
+                    resolution[0] = position[0] + this.radius * -2 + 1;
+                } else if (position[0] < -this.radius) {
+                    // [MIN, X, X]
+                    resolution[0] = position[0] + this.radius * 2 + 1;
+                } else if (position[1] > this.radius) {
+                    // [X, MAX, X]
+                    resolution[1] = position[1] + this.radius * -2 - 1;
+                } else if (position[1] < -this.radius) {
+                    // [X, MIN, X]
+                    resolution[1] = position[1] + this.radius * 2 + 1;
+                } else if (position[2] > this.radius) {
+                    // [X, X, MAX]
+                    resolution[2] = position[2] + this.radius * -2 + 1;
+                } else if (position[2] < -this.radius) {
+                    // [X, X, MIN]
+                    resolution[2] = position[2] + this.radius * 2 + 1;
+                }
             }
 
-            return position;
+            if (resolution && _.reject(resolution, _.isNull).length < 2) {
+                // Only one axis was out of bounds.
+                if (resolution[0] !== null) {
+                    return this.completeTile(
+                        resolution[0],
+                        -position[1]
+                    );
+                } else if (resolution[1] !== null) {
+                    return this.completeTile(
+                        -position[0],
+                        resolution[1]
+                    );
+                } else if (resolution[2] !== null) {
+                    return this.completeTile(
+                        null,
+                        -position[1] - 1,
+                        resolution[2]
+                    );
+                }
+            } else if (resolution !== null) {
+                // Two axis out of bounds.
+                return this.resolveTile.apply(this, resolution);
+            } else {
+                // Requested position within bounds.
+                return position;
+            }
         },
         // @param rotation as number between 0 and 5.
         // @param origin (optional) as coordinate.
