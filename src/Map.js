@@ -1,4 +1,12 @@
-define([], function() {
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+    var requirejs = require("requirejs");
+    requirejs.config({
+        baseUrl: __dirname + "/../../../build/code/deps",
+        nodeRequire: require
+    });
+}
+define(['underscore'], function(_) {
     function Map(radius) {
         this.radius = radius;
     };
@@ -112,11 +120,10 @@ define([], function() {
                 delta = [coordinate[0], coordinate[1], coordinate[2]];
             }
 
+            rotation = rotation % 6;
             if (rotation > 2) {
-                rotation = rotation % 5;
-
                 direction = -1;
-                rotation -= 3;
+                rotation = 6 - rotation;
             }
 
             if (direction > 0) {
@@ -134,7 +141,6 @@ define([], function() {
                         -delta[0],
                         -delta[1]
                     ];
-                    
                 }
             }
 
