@@ -68,17 +68,17 @@ define([], function() {
             if (resolution && _.reject(resolution, _.isNull).length < 2) {
                 // Only one axis was out of bounds.
                 if (resolution[0] !== null) {
-                    return this.completeTile(
+                    return this.resolveTile(
                         resolution[0],
                         -position[1]
                     );
                 } else if (resolution[1] !== null) {
-                    return this.completeTile(
+                    return this.resolveTile(
                         -position[0],
                         resolution[1]
                     );
                 } else if (resolution[2] !== null) {
-                    return this.completeTile(
+                    return this.resolveTile(
                         null,
                         -position[1] - 1,
                         resolution[2]
