@@ -1,10 +1,7 @@
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
     var requirejs = require("requirejs");
-    requirejs.config({
-        baseUrl: __dirname + "/../../../build/code/deps",
-        nodeRequire: require
-    });
+    requirejs.config();
 }
 define(['underscore'], function(_) {
     function Map(radius) {
