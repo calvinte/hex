@@ -3,9 +3,11 @@ require([
     'Map',
     'underscore/underscore-min',//shim?
 ], function(d3, Map) {
-    var map = new Map(7);
-    var tile = map.resolveTile(0, 0);
-    var tile2 = map.resolveTile(2, 2);
-    console.log(tile, tile2, map.computeRotation(tile, tile2, 1));
+    var map = new Map(2);
+    console.log(map.resolveTile(-3, 0, 3));
+    console.log(map.resolveTile(-4, 1, 3));
+
+    window.map = map;
+    //map.resolveTile(7, 7);
 });
 
