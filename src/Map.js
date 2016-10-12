@@ -78,46 +78,40 @@ define(['underscore'], function(_) {
 
             if (resolution && _.reject(resolution, _.isNull).length < 2) {
                 // Only one axis was out of bounds.
-                if (resolution[0] !== null) {
-                    if (resolution[0] > 0) {
-                        return this.resolveTile(
-                            resolution[0],
-                            position[1] + this.radius * -2 + 1
-                        );
-                    } else {
-                        return this.resolveTile(
-                            resolution[0],
-                            position[1] - this.radius * -2 - 1
-                        );
-                    }
+                if (resolution[0] !== null && resolution[0] > 0) {
+                    return this.resolveTile(
+                        resolution[0],
+                        position[1] + this.radius * -2 + 1
+                    );
+                } else if (resolution[0] !== null) {
+                    return this.resolveTile(
+                        resolution[0],
+                        position[1] - this.radius * -2 - 1
+                    );
+                } else if (resolution[1] !== null && resolution[1] > 0) {
+                    return this.resolveTile(
+                        null,
+                        resolution[1],
+                        position[2] + this.radius * -2 + 1
+                    );
                 } else if (resolution[1] !== null) {
-                    if (resolution[1] > 0) {
-                        return this.resolveTile(
-                            null,
-                            resolution[1],
-                            position[2] + this.radius * -2 + 1
-                        );
-                    } else {
-                        return this.resolveTile(
-                            null,
-                            resolution[1],
-                            position[2] + this.radius + 1
-                        );
-                    }
+                    return this.resolveTile(
+                        null,
+                        resolution[1],
+                        position[2] + this.radius + 1
+                    );
+                } else if (resolution[2] !== null && resolution[2] > 0) {
+                    return this.resolveTile(
+                        null,
+                        position[1] + this.radius * -1,
+                        resolution[2]
+                    );
                 } else if (resolution[2] !== null) {
-                    if (resolution[2] > 0) {
-                        return this.resolveTile(
-                            null,
-                            position[1] + this.radius * -1,
-                            resolution[2]
-                        );
-                    } else {
-                        return this.resolveTile(
-                            null,
-                            position[1] + this.radius,
-                            resolution[2]
-                        );
-                    }
+                    return this.resolveTile(
+                        null,
+                        position[1] + this.radius,
+                        resolution[2]
+                    );
                 }
             } else if (resolution !== null) {
                 // Two axis out of bounds.
