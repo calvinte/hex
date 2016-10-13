@@ -17,5 +17,6 @@ node server.js &
 ```
 
 (4) View demo: http://localhost:3000/
-![Sample output](/sample/sample.png?raw=true "Sample output")
+
+![Sample output](/sample/metaSample.png?raw=true "Sample output")
 
