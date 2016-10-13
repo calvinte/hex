@@ -13,7 +13,7 @@ mocha spec/runner.js
 
 (3) Run server:
 ```
-node server.js &
+node server.js
 ```
 
 (4) View demo: http://localhost:3000/
