@@ -33,28 +33,28 @@ define(['underscore'], function(_) {
 
                 if (position[0] < -this.radius && position[1] > this.radius) {
                     // [MIN, MAX, X]
-                    resolution[0] = position[0] + this.radius * 2 + 1,
-                    resolution[1] = position[1] + this.radius * -1 - 1
+                    resolution[0] = position[0] + this.radius * 2 + 1;
+                    resolution[1] = position[1] + this.radius * -1 - 1;
                 } else if (position[0] < -this.radius && position[2] > this.radius) {
                     // [MIN, X, MAX]
-                    resolution[0] = position[0] + this.radius + 1,
-                    resolution[2] = position[2] + this.radius * -2 - 1
+                    resolution[0] = position[0] + this.radius + 1;
+                    resolution[2] = position[2] + this.radius * -2 - 1;
                 } else if (position[1] < -this.radius && position[0] > this.radius) {
                     // [MAX, MIN, X]
-                    resolution[0] = position[0] + this.radius * -2 - 1,
-                    resolution[1] = position[1] + this.radius + 1
+                    resolution[0] = position[0] + this.radius * -2 - 1;
+                    resolution[1] = position[1] + this.radius + 1;
                 } else if (position[1] < -this.radius && position[2] > this.radius) {
                     // [X, MIN, MAX]
-                    resolution[1] = position[1] + this.radius * 2 + 1,
-                    resolution[2] = position[2] + this.radius * -1 - 1
+                    resolution[1] = position[1] + this.radius * 2 + 1;
+                    resolution[2] = position[2] + this.radius * -1 - 1;
                 } else if (position[2] < -this.radius && position[0] > this.radius) {
                     // [MAX, X, MIN]
-                    resolution[0] = position[0] + this.radius * -1 - 1,
-                    resolution[2] = position[2] + this.radius * 2 + 1
+                    resolution[0] = position[0] + this.radius * -1 - 1;
+                    resolution[2] = position[2] + this.radius * 2 + 1;
                 } else if (position[2] < -this.radius && position[1] > this.radius) {
                     // [X, MAX, MIN]
-                    resolution[1] = position[1] + this.radius * -2 - 1,
-                    resolution[2] = position[2] + this.radius + 1
+                    resolution[1] = position[1] + this.radius * -2 - 1;
+                    resolution[2] = position[2] + this.radius + 1;
                 } else if (position[0] > this.radius) {
                     // [MAX, X, X]
                     resolution[0] = position[0] + this.radius * -2 - 1;
