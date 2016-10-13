@@ -19,7 +19,7 @@ define([
                 .attr('version', '1.1')
                 .attr('baseProfile', 'full')
                 .attr('viewBox', this.computeViewBox())
-                .attr('preserveAspectRatio', 'xMinYMin'),
+                .attr('preserveAspectRatio', 'xMidYMid'),
         };
 
 
@@ -55,8 +55,10 @@ define([
             return path;
         },
         computeViewBox: function() {
-            var min = -2 * this.tileSize * this.map.radius;
+            var xMultiplier, yMultiplier;
+            var min = -1 * this.tileSize * (this.map.radius - 2);
             var max = -2 * min;
+
             return min + ', ' + min + ', ' + max + ', ' + max;
         },
         getTileMetadata: function(q, r, s) {

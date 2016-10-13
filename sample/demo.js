@@ -9,7 +9,7 @@ require([
     'Map',
     'Layout',
 ], function(Map, Layout) {
-    var map = new Map(2);
+    var map = new Map(10);
     var wrapper = document.createElement('div');
     var layout = new Layout(map, wrapper);
 

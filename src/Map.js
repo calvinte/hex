@@ -3,7 +3,10 @@ if (typeof define !== 'function') {
     var requirejs = require("requirejs");
     requirejs.config();
 }
-define(['underscore'], function(_) {
+define([
+    'underscore',
+    'Tile',
+], function(_, Tile) {
     'use strict';
 
     function Map(radius) {
@@ -16,12 +19,9 @@ define(['underscore'], function(_) {
         checkOutOfBounds: function(q, r, s) {
             return Math.abs(q) > this.radius || Math.abs(r) > this.radius || Math.abs(s) > this.radius;
         },
-        completeTile: function(q, r, s) {
-            return [
-                typeof q === 'number' ? q : (-r - s),
-                typeof r === 'number' ? r : (-q - s),
-                typeof s === 'number' ? s : (-q - r)
-            ]
+        computeDistance: function(a, b) {
+            // @TODO confirm
+            return (Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2])) / 2;
         },
         // @param rotation as number between 0 and 5.
         // @param origin (optional) as coordinate.
@@ -134,7 +134,11 @@ define(['underscore'], function(_) {
          */
         resolveCoordinate: function(q, r, s) {
             var resolution = null;
-            var position = this.completeTile(q, r, s);
+            var position = [
+                typeof q === 'number' ? q : (-r - s),
+                typeof r === 'number' ? r : (-q - s),
+                typeof s === 'number' ? s : (-q - r)
+            ]
 
             if (this.checkOutOfBounds.apply(this, position)) {
                 resolution = [null, null, null];
