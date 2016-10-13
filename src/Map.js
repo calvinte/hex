@@ -21,7 +21,7 @@ define(['underscore'], function(_) {
         //
         // When provided tile is out of bounds, resolveTile will discover the
         // appropriate wraparound tile. This is a recursive process that
-        // mirrors the provided tile toward the center. Tiles that neighbour
+        // transposes the provided tile toward the map. Tiles that neighbour
         // the border of the map will never cause a recursion, only distant
         // tiles recurse.
         resolveTile: function(q, r, s) {
