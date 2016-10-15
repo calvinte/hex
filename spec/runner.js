@@ -7,6 +7,7 @@ if (typeof define !== 'function') {
         paths: {
             Tile: __dirname + '/../src/Tile',
             Map: __dirname + '/../src/Map',
+            baconjs: __dirname + '../node_modules/baconjs/dist/Bacon',
         }
     });
 }
@@ -122,6 +123,57 @@ describe('Hex', function() {
                 // All axis out-of-bounds.
                 assert.deepEqual(map.resolveCoordinate(4, 9), [0, 0, 0]);
                 assert.deepEqual(map.resolveCoordinate(4, 5), [-2, 1, 1]);
+
+                done();
+            });
+        });
+    });
+    describe('Tile', function() {
+        it('should compute center', function(done) {
+            define(['Map', 'Tile'], function(Map, Tile) {
+                var map = new Map(2); // Map with radius of 2 (width is 5).
+
+                // A couple nice round-number examples (uncommon).
+                assert.deepEqual(new Tile(map, -1, 2).center(2), [0, 3]);
+                assert.deepEqual(new Tile(map, 1, -2).center(2), [0, -3]);
+                done();
+            });
+        });
+        it('should compute vertices', function(done) {
+            define(['Map', 'Tile'], function(Map, Tile) {
+                var map = new Map(2); // Map with radius of 2 (width is 5).
+                var tile = new Tile(map, -1, 2);
+                var expectedTileVerticies = [[
+                        Math.sqrt(3)/2,
+                        2.5
+                    ], [
+                        Math.sqrt(3)/2,
+                        3.5
+                    ], [
+                        Math.cos(90 * Math.PI/180),
+                        4
+                    ], [
+                        -Math.sqrt(3)/2,
+                        3.5
+                    ], [
+                        -Math.sqrt(3)/2,
+                        2.5
+                    ], [
+                        Math.cos(270 * Math.PI/180),
+                        2
+                    ]
+                ];
+
+                _.each(tile.vertices(2), function(vertex, i) {
+                    _.each(vertex, function(mag, j) {
+                        if (Math.abs(mag) < 1) {
+                            // Small number evaluation...
+                            assert(vertex[0] - expectedTileVerticies[i][0] < 1e-15);
+                        } else {
+                            assert.equal(mag.toPrecision(1), expectedTileVerticies[i][j].toPrecision(1));
+                        }
+                    });
+                });
 
                 done();
             });

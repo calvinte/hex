@@ -1,6 +1,6 @@
 define([
     'baconjs'
-], function(bacon) {
+], function(Bacon) {
     function Tile(map, q, r, s) {
         this.map = map;
         this.coordinate = this.map.resolveCoordinate(q, r, s);
@@ -74,10 +74,6 @@ define([
         * @param {number} [scale=1]
         */
         center: function(scale) {
-            if (!scale) {
-                scale = 1;
-            }
-
             if (this.pointy) {
                 return [
                     scale/2 * (Math.sqrt(3) * this.coordinate[0] + Math.sqrt(3) / 2 * this.coordinate[1]),
