@@ -123,6 +123,7 @@ define([
          * with each iteration.
          * @see http://www.redblobgames.com/grids/hexagons/#coordinates
          *
+         * Two of [q, r, s] required.
          * @param {number} [q]
          * @param {number} [r]
          * @param {number} [s]
