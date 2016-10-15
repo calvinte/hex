@@ -178,6 +178,32 @@ describe('Hex', function() {
                 done();
             });
         });
+        it('should compose events into streams', function(done) {
+            define(['Map', 'Tile'], function(Map, Tile) {
+                var map = new Map(2); // Map with radius of 2 (width is 5).
+                var tile = new Tile(map, -1, 2);
+
+                tile.actions.blurStream.onValue(function(event) {
+                    assert.equal(event.type, 'mouseout');
+                });
+                tile.actions.focusStream.onValue(function(event) {
+                    assert.equal(event.type, 'mouseover');
+                });
+                tile.actions.primaryStream.onValue(function(event) {
+                    assert.equal(event.type, 'mouseup');
+                });
+                tile.actions.secondaryStream.onValue(function(event) {
+                    assert.equal(event.type, 'contextmenu');
+                });
+
+                tile.actions.mouseoutStream.push({type: 'mouseout'})
+                tile.actions.mouseoverStream.push({type: 'mouseover'})
+                tile.actions.mouseupStream.push({type: 'mouseup'})
+                tile.actions.contextmenuStream.push({type: 'contextmenu'})
+
+                done();
+            });
+        });
     });
 });
 

@@ -54,19 +54,6 @@ define([
             el.removeEventListener('mouseover', this.actions.mouseoverStream.push.bind(this.actions.mouseoverStream));
             el.removeEventListener('mouseup', this.actions.mouseupStream.push.bind(this.actions.mouseupStream));
         }.bind(this));
-
-        this.actions.blurStream.onValue(function(event) {
-            console.log('blurStream', event.type);
-        });
-        this.actions.focusStream.onValue(function(event) {
-            console.log('focusStream', event.type);
-        });
-        this.actions.primaryStream.onValue(function(event) {
-            console.log('primaryStream', event.type);
-        });
-        this.actions.secondaryStream.onValue(function(event) {
-            console.log('secondaryStream', event.type);
-        });
     };
 
     Tile.prototype = {
