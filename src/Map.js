@@ -128,7 +128,7 @@ define([
          * @param {number} [s]
          */
         resolveCoordinate: function(q, r, s) {
-            var isSingleAxisTranslation = true, resolution = null;
+            var isSingleAxisTranslation = false, resolution = null;
             var position = [
                 typeof q === 'number' ? q : (-r - s),
                 typeof r === 'number' ? r : (-q - s),
