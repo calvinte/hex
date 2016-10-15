@@ -90,16 +90,6 @@ define([
                 ];
             }
         },
-        handleDraw: function handleDraw() {
-        },
-        handleUndraw: function handleUndraw() {
-        },
-        handleBlur: function handleBlur() {
-        },
-        handleFocus: function handleFocus() {
-        },
-        handleClick: function handleClick() {
-        },
         pointy: true,
         /**
         * Returns two-dimensional array of verticies.
