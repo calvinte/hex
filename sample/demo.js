@@ -1,7 +1,8 @@
 require.config({
     paths: {
         d3: 'd3/build/d3',
-        underscore: 'underscore/underscore-min',
+        underscore: 'underscore/underscore',
+        baconjs: 'baconjs/dist/Bacon',
     }
 });
 
