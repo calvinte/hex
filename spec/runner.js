@@ -2,7 +2,7 @@ var assert = require('assert');
 var _ = require('underscore');
 
 if (typeof define !== 'function') {
-    GLOBAL.define = require("requirejs");
+    GLOBAL.define = require('requirejs');
     GLOBAL.define.config({
         paths: {
             Tile: __dirname + '/../src/Tile',

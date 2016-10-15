@@ -128,7 +128,7 @@ define([
          * @param {number} [s]
          */
         resolveCoordinate: function(q, r, s) {
-            var resolution = null;
+            var isSingleAxisTranslation = true, resolution = null;
             var position = [
                 typeof q === 'number' ? q : (-r - s),
                 typeof r === 'number' ? r : (-q - s),
@@ -165,25 +165,31 @@ define([
                 } else if (position[0] > this.radius) {
                     // [MAX, X, X]
                     resolution[0] = position[0] + this.radius * -2 - 1;
+                    isSingleAxisTranslation = true;
                 } else if (position[0] < -this.radius) {
                     // [MIN, X, X]
                     resolution[0] = position[0] + this.radius * 2 + 1;
+                    isSingleAxisTranslation = true;
                 } else if (position[1] > this.radius) {
                     // [X, MAX, X]
                     resolution[1] = position[1] + this.radius * -2 - 1;
+                    isSingleAxisTranslation = true;
                 } else if (position[1] < -this.radius) {
                     // [X, MIN, X]
                     resolution[1] = position[1] + this.radius * 2 + 1;
+                    isSingleAxisTranslation = true;
                 } else if (position[2] > this.radius) {
                     // [X, X, MAX]
                     resolution[2] = position[2] + this.radius * -2 - 1;
+                    isSingleAxisTranslation = true;
                 } else if (position[2] < -this.radius) {
                     // [X, X, MIN]
                     resolution[2] = position[2] + this.radius * 2 + 1;
+                    isSingleAxisTranslation = true;
                 }
             }
 
-            if (resolution && _.reject(resolution, _.isNull).length < 2) {
+            if (isSingleAxisTranslation) {
                 // Only one axis was out of bounds.
                 if (resolution[0] !== null && resolution[0] > 0) {
                     return this.resolveCoordinate(
