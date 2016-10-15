@@ -21,24 +21,6 @@ define([
                 .attr('viewBox', this.computeViewBox())
                 .attr('preserveAspectRatio', 'xMidYMid'),
         };
-
-
-        // @TODO performance bottleneck. This is the first time we create every
-        // tile. Ideally we should only create tiles as they're needed.
-        this.map.forEachCoordinate(function(q, r, s) {
-            var d3Selection = null;
-            var tile = this.map.getTile(q, r, s);
-            var tileMetadata = this.getTileMetadata(q, r, s);
-            tileMetadata.path = this.constructPath(tile.vertices(this.tileSize));
-            tileMetadata.el = this.elements.svg.append('path')
-                .attr('d', tileMetadata.path.toString())
-                .attr('fill', '#F0F')
-                .attr('stroke', 'white')
-                .attr('stroke-width', '0.5')
-                .node();
-
-            tile.actions.drawStream.push(tileMetadata.el);
-        }.bind(this));
     };
 
     Layout.prototype = {
@@ -63,6 +45,19 @@ define([
             var max = -2 * min;
 
             return min + ', ' + min + ', ' + max + ', ' + max;
+        },
+        drawTile: function(q, r, s) {
+            var tile = this.map.getTile(q, r, s);
+            var tileMetadata = this.getTileMetadata(q, r, s);
+            tileMetadata.path = this.constructPath(tile.vertices(this.tileSize));
+            tileMetadata.el = this.elements.svg.append('path')
+                .attr('d', tileMetadata.path.toString())
+                .attr('fill', '#F0F')
+                .attr('stroke', 'white')
+                .attr('stroke-width', '0.5')
+                .node();
+
+            tile.actions.drawStream.push(tileMetadata.el);
         },
         getTileMetadata: function(q, r, s) {
             var metadata = this.map.getTileMetadata(q, r, s);

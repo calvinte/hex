@@ -13,7 +13,12 @@ require([
     var map = new Map(10);
     var wrapper = document.createElement('div');
     var layout = new Layout(map, wrapper);
+    map.forEachCoordinate(layout.drawTile.bind(layout));
 
-    document.body.appendChild(wrapper);
+    // Note: we've created the svg (all layout logic) without yet modifying
+    // the dom. Now we request a frame, then append.
+    window.requestAnimationFrame(function() {
+        document.body.appendChild(wrapper);
+    });
 });
 
