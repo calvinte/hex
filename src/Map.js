@@ -7,6 +7,13 @@ define([
     function Map(radius) {
         this.radius = radius;
         this.tiles = {}; // Stored by coordinate, formatted: `{q: {r: ...}}`.
+
+        this.actions = {
+            tileBlurStream: new Bacon.Bus(),
+            tileFocusStream: new Bacon.Bus(),
+            tilePrimaryStream: new Bacon.Bus(),
+            tileSecondaryStream: new Bacon.Bus(),
+        };
     };
 
     Map.prototype = {

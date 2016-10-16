@@ -37,6 +37,20 @@ define([
 
         this.actions.secondaryStream.plug(this.actions.contextmenuStream);
         // @TODO mobile equivalency: double tap
+
+        var unplugMapStreams = [];
+        this.actions.drawStream.onValue(function() {
+            unplugMapStreams.push(this.map.actions.tileBlurStream.plug(this.actions.blurStream));
+            unplugMapStreams.push(this.map.actions.tileFocusStream.plug(this.actions.focusStream));
+            unplugMapStreams.push(this.map.actions.tilePrimaryStream.plug(this.actions.primaryStream));
+            unplugMapStreams.push(this.map.actions.tileSecondaryStream.plug(this.actions.secondaryStream));
+        }.bind(this));
+
+        this.actions.undrawStream.onValue(function() {
+            _.each(unplugMapStreams, function(fn) {
+                fn();
+            });
+        });
     };
 
     Tile.prototype = {
@@ -70,15 +84,16 @@ define([
         * Returns two-dimensional array of verticies.
         * @param {number} scale
         */
-        vertices: function(scale) {
+        vertices: function(scale, spacing) {
             var i = -1, angle, vertices = [];
             var center = this.center(scale);
+            var hexSize = scale - spacing;
 
             while (++i < 6) {
                 angle = 2 * Math.PI * (2 * i - (this.pointy ? 1 : 0)) / 12;
                 vertices.push([
-                    center[0] + 0.5 * scale * Math.cos(angle),
-                    center[1] + 0.5 * scale * Math.sin(angle)
+                    center[0] + 0.5 * hexSize * Math.cos(angle),
+                    center[1] + 0.5 * hexSize * Math.sin(angle)
                 ]);
             }
 

@@ -26,6 +26,14 @@ require([
         })
     });
 
+    map.actions.tileFocusStream.onValue(function(event) {
+        event.target.setAttribute('stroke', 'black');
+    });
+
+    map.actions.tileBlurStream.onValue(function(event) {
+        event.target.setAttribute('stroke', 'transparent');
+    });
+
     function addMapToDom() {
         window.requestAnimationFrame(function() {
             document.body.appendChild(wrapper);

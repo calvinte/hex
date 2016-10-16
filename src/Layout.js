@@ -36,6 +36,7 @@ define([
             while (++i < 6) {
                 path.lineTo(verticies[i][0], verticies[i][1]);
             }
+            path.closePath();
 
             return path;
         },
@@ -53,12 +54,14 @@ define([
 
             var tile = this.map.getTile(q, r, s);
             this.getTileMetadata(tile, function(tileMetadata) {
-                tileMetadata.path = this.constructPath(tile.vertices(this.tileSize));
+                tileMetadata.path = this.constructPath(tile.vertices(this.tileSize, this.tileSpacing));
                 tileMetadata.el = this.elements.svg.append('path')
                     .attr('d', tileMetadata.path.toString())
                     .attr('fill', '#F0F')
-                    .attr('stroke', 'white')
-                    .attr('stroke-width', '0.5')
+                    .attr('stroke', 'transparent')
+                    .attr('stroke-alignment', 'inner')
+                    .attr('stroke-location', 'inside')
+                    .attr('stroke-width', '4')
                     .node();
 
                     tile.actions.drawStream.onValue(function bindEventsToElement(el) {
@@ -93,6 +96,7 @@ define([
             }.bind(this));
         },
         tileSize: 50,
+        tileSpacing: 2,
     };
 
     return Layout;
