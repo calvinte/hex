@@ -61,7 +61,25 @@ define([
                     .attr('stroke-width', '0.5')
                     .node();
 
-                tile.actions.drawStream.push(tileMetadata.el);
+                    tile.actions.drawStream.onValue(function bindEventsToElement(el) {
+                        el.addEventListener('contextmenu', tile.actions.contextmenuStream.push.bind(tile.actions.contextmenuStream));
+                        el.addEventListener('touchend', tile.actions.touchendStream.push.bind(tile.actions.touchendStream));
+                        el.addEventListener('touchstart', tile.actions.touchstartStream.push.bind(tile.actions.touchstartStream));
+                        el.addEventListener('mouseout', tile.actions.mouseoutStream.push.bind(tile.actions.mouseoutStream));
+                        el.addEventListener('mouseover', tile.actions.mouseoverStream.push.bind(tile.actions.mouseoverStream));
+                        el.addEventListener('mouseup', tile.actions.mouseupStream.push.bind(tile.actions.mouseupStream));
+                    });
+
+                    tile.actions.undrawStream.onValue(function unbindEventsToElement(el) {
+                        el.removeEventListener('contextmenu', tile.actions.contextmenuStream.push.bind(tile.actions.contextmenuStream));
+                        el.removeEventListener('touchend', tile.actions.touchendStream.push.bind(tile.actions.touchendStream));
+                        el.removeEventListener('touchstart', tile.actions.touchstartStream.push.bind(tile.actions.touchstartStream));
+                        el.removeEventListener('mouseout', tile.actions.mouseoutStream.push.bind(tile.actions.mouseoutStream));
+                        el.removeEventListener('mouseover', tile.actions.mouseoverStream.push.bind(tile.actions.mouseoverStream));
+                        el.removeEventListener('mouseup', tile.actions.mouseupStream.push.bind(tile.actions.mouseupStream));
+                    });
+
+                    tile.actions.drawStream.push(tileMetadata.el);
 
                 fn();
                 return tileMetadata;

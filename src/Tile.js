@@ -37,24 +37,6 @@ define([
 
         this.actions.secondaryStream.plug(this.actions.contextmenuStream);
         // @TODO mobile equivalency: double tap
-
-        this.actions.drawStream.onValue(function bindEventsToElement(el) {
-            el.addEventListener('contextmenu', this.actions.contextmenuStream.push.bind(this.actions.contextmenuStream));
-            el.addEventListener('touchend', this.actions.touchendStream.push.bind(this.actions.touchendStream));
-            el.addEventListener('touchstart', this.actions.touchstartStream.push.bind(this.actions.touchstartStream));
-            el.addEventListener('mouseout', this.actions.mouseoutStream.push.bind(this.actions.mouseoutStream));
-            el.addEventListener('mouseover', this.actions.mouseoverStream.push.bind(this.actions.mouseoverStream));
-            el.addEventListener('mouseup', this.actions.mouseupStream.push.bind(this.actions.mouseupStream));
-        }.bind(this));
-
-        this.actions.undrawStream.onValue(function unbindEventsToElement(el) {
-            el.removeEventListener('contextmenu', this.actions.contextmenuStream.push.bind(this.actions.contextmenuStream));
-            el.removeEventListener('touchend', this.actions.touchendStream.push.bind(this.actions.touchendStream));
-            el.removeEventListener('touchstart', this.actions.touchstartStream.push.bind(this.actions.touchstartStream));
-            el.removeEventListener('mouseout', this.actions.mouseoutStream.push.bind(this.actions.mouseoutStream));
-            el.removeEventListener('mouseover', this.actions.mouseoverStream.push.bind(this.actions.mouseoverStream));
-            el.removeEventListener('mouseup', this.actions.mouseupStream.push.bind(this.actions.mouseupStream));
-        }.bind(this));
     };
 
     Tile.prototype = {
