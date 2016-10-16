@@ -1,6 +1,7 @@
 define([
-    'baconjs'
-], function(Bacon) {
+    'baconjs',
+    'Storage'
+], function(Bacon, Storage) {
     function Tile(map, q, r, s) {
         this.map = map;
         this.coordinate = this.map.resolveCoordinate(q, r, s);
@@ -72,6 +73,11 @@ define([
                     scale/2 * (Math.sqrt(3) / 2 * this.coordinate[0] + Math.sqrt(3) * this.coordinate[1])
                 ];
             }
+        },
+        getMetadata: function(fn) {
+            Storage.getItem('Hex:Tile:' + this.coordinate.join(','), function(value) {
+                fn(value);
+            })
         },
         pointy: true,
         /**

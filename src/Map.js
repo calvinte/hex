@@ -7,7 +7,6 @@ define([
     function Map(radius) {
         this.radius = radius;
         this.tiles = {}; // Stored by coordinate, formatted: `{q: {r: ...}}`.
-        this.tileMetadata = {}; // Same pattern as above.
     };
 
     Map.prototype = {
@@ -68,6 +67,11 @@ define([
                 origin[2] + delta[2]
             );
         },
+        /**
+         * Method loops over every tile in the map. This should not be used
+         * unless the entire map is presented on the screen at one time.
+         * @param {function} fn
+         */
         forEachCoordinate: function(fn) {
             var i, j, tile;
 
@@ -93,22 +97,9 @@ define([
             if (!(this.tiles[q] && this.tiles[q][r])) {
                 this.tiles[q] = this.tiles[q] || {};
                 this.tiles[q][r] = new Tile(this, q, r, s);
-
             }
 
             return this.tiles[q][r];
-        },
-        getTileMetadata: function(q, r, s) {
-            if (this.checkOutOfBounds(q, r, s)) {
-                return null;
-            }
-
-            if (!(this.tileMetadata[q] && this.tileMetadata[q][r])) {
-                this.tileMetadata[q] = this.tileMetadata[q] || {};
-                this.tileMetadata[q][r] = {};
-            }
-
-            return this.tileMetadata[q][r];
         },
         /**
          * Implements cubic coordinate system. Two of three parameters are

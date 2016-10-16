@@ -46,23 +46,33 @@ define([
 
             return min + ', ' + min + ', ' + max + ', ' + max;
         },
-        drawTile: function(q, r, s) {
-            var tile = this.map.getTile(q, r, s);
-            var tileMetadata = this.getTileMetadata(q, r, s);
-            tileMetadata.path = this.constructPath(tile.vertices(this.tileSize));
-            tileMetadata.el = this.elements.svg.append('path')
-                .attr('d', tileMetadata.path.toString())
-                .attr('fill', '#F0F')
-                .attr('stroke', 'white')
-                .attr('stroke-width', '0.5')
-                .node();
+        drawTile: function(q, r, s, fn) {
+            if (this.map.checkOutOfBounds(q, r, s)) {
+                return null;
+            }
 
-            tile.actions.drawStream.push(tileMetadata.el);
+            var tile = this.map.getTile(q, r, s);
+            this.getTileMetadata(tile, function(tileMetadata) {
+                tileMetadata.path = this.constructPath(tile.vertices(this.tileSize));
+                tileMetadata.el = this.elements.svg.append('path')
+                    .attr('d', tileMetadata.path.toString())
+                    .attr('fill', '#F0F')
+                    .attr('stroke', 'white')
+                    .attr('stroke-width', '0.5')
+                    .node();
+
+                tile.actions.drawStream.push(tileMetadata.el);
+
+                fn();
+                return tileMetadata;
+            });
         },
-        getTileMetadata: function(q, r, s) {
-            var metadata = this.map.getTileMetadata(q, r, s);
-            metadata['_hex_layout_' + this.layoutIdx] = metadata['_hex_layout_' + this.layoutIdx] || {};
-            return metadata['_hex_layout_' + this.layoutIdx];
+        getTileMetadata: function(tile, fn) {
+            tile.getMetadata(function(tileMetadata) {
+                tileMetadata['_hex_layout_' + this.layoutIdx] = tileMetadata['_hex_layout_' + this.layoutIdx] || {};
+                tileMetadata['_hex_layout_' + this.layoutIdx];
+                return fn.call(this, tileMetadata) || tileMetadata;
+            }.bind(this));
         },
         tileSize: 50,
     };

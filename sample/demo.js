@@ -13,12 +13,23 @@ require([
     var map = new Map(10);
     var wrapper = document.createElement('div');
     var layout = new Layout(map, wrapper);
-    map.forEachCoordinate(layout.drawTile.bind(layout));
-
-    // Note: we've created the svg (all layout logic) without yet modifying
-    // the dom. Now we request a frame, then append.
-    window.requestAnimationFrame(function() {
-        document.body.appendChild(wrapper);
+    var waitingToDraw = 0;
+    map.forEachCoordinate(function(q, r, s) {
+        waitingToDraw++;
+        layout.drawTile(q, r, s, function() {
+            waitingToDraw--;
+            if (!waitingToDraw) {
+                // Note: we've created the svg (all layout logic) without yet
+                // modifying the dom. Now we request a frame, then append.
+                addMapToDom();
+            }
+        })
     });
+
+    function addMapToDom() {
+        window.requestAnimationFrame(function() {
+            document.body.appendChild(wrapper);
+        });
+    };
 });
 
