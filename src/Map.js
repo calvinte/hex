@@ -1,7 +1,8 @@
 define([
     'underscore',
     'Tile',
-], function(_, Tile) {
+    'Bacon',
+], function(_, Tile, Bacon) {
     'use strict';
 
     function Map(radius) {
