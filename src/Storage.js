@@ -16,7 +16,6 @@ define([], function(worker) {
             storageWorker.postMessage([key, null]);
         },
         getItem: function(key, fn) {
-            console.log('get', key);
             storageWorker.postMessage([key]);
 
             if (waitingMap[key]) {
@@ -26,7 +25,6 @@ define([], function(worker) {
             }
         },
         setItem: function(key, value) {
-            console.log('set', key, value);
             storageWorker.postMessage([key, value]);
         },
     };
