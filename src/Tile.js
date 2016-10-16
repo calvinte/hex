@@ -59,7 +59,7 @@ define([
 
     Tile.prototype = {
         /**
-        * @param {number} [scale=1]
+        * @param {number} scale
         */
         center: function(scale) {
             if (this.pointy) {
