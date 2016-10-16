@@ -88,8 +88,8 @@ define([
         getTileMetadata: function(tile, fn) {
             tile.getMetadata(function(tileMetadata) {
                 tileMetadata['_hex_layout_' + this.layoutIdx] = tileMetadata['_hex_layout_' + this.layoutIdx] || {};
-                tileMetadata['_hex_layout_' + this.layoutIdx];
-                return fn.call(this, tileMetadata) || tileMetadata;
+                tileMetadata['_hex_layout_' + this.layoutIdx] = fn.call(this, tileMetadata['_hex_layout_' + this.layoutIdx]) || tileMetadata['_hex_layout_' + this.layoutIdx];
+                return tileMetadata;
             }.bind(this));
         },
         tileSize: 50,

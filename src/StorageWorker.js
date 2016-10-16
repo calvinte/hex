@@ -11,7 +11,7 @@ onmessage = function(e) {
         map[key] = value;
     } else {
         // Get mode.
-        map[key] = map[key] || {};
+        map[key] = map[key] || '{}';
         postMessage([key, map[key]]);
     }
 }

@@ -4,7 +4,7 @@ define([], function(worker) {
 
     storageWorker.onmessage = function(e) {
         var key = e.data[0];
-        var value = e.data[1];
+        var value = e.data[1] && JSON.parse(e.data[1]);
         _.each(waitingMap[key], function(fn) {
             fn(value);
         });
@@ -25,7 +25,7 @@ define([], function(worker) {
             }
         },
         setItem: function(key, value) {
-            storageWorker.postMessage([key, value]);
+            storageWorker.postMessage([key, JSON.stringify(value)]);
         },
     };
 });

@@ -57,9 +57,13 @@ define([
             }
         },
         getMetadata: function(fn) {
-            Storage.getItem('Hex:Tile:' + this.coordinate.join(','), function(value) {
-                fn(value);
-            })
+            var key = 'Hex:Tile:' + this.coordinate.join(',');
+            Storage.getItem(key, function(value) {
+                var set = fn(value);
+                if (set || set === null) {
+                    Storage.setItem(key, set);
+                }
+            });
         },
         pointy: true,
         /**
