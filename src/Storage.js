@@ -1,6 +1,24 @@
 define([], function(worker) {
-    var storageWorker = new Worker(require.toUrl('StorageWorker.js'));
+    var storageWorker;
     var waitingMap = {};
+
+    if (typeof Worker !== 'undefined') {
+        storageWorker = new Worker(require.toUrl('StorageWorker.js'));
+    } else {
+        // No WebWorkers in node, this is a workaround for the test suite.
+        var storageWorkerSpecMap = {};
+        storageWorker = {
+            postMessage: function(dat) {
+                var key = dat[0];
+                var value = dat[1];
+                if (value) {
+                    storageWorkerSpecMap[key] = value;
+                } else {
+                    storageWorker.onmessage({data:[key, storageWorkerSpecMap[key]]});
+                }
+            }
+        }
+    }
 
     storageWorker.onmessage = function(e) {
         var key = e.data[0];

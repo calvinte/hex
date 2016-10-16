@@ -1,7 +1,7 @@
 define([
     'underscore',
     'Tile',
-    'Bacon',
+    'baconjs',
 ], function(_, Tile, Bacon) {
     'use strict';
 

@@ -87,7 +87,7 @@ define([
         vertices: function(scale, spacing) {
             var i = -1, angle, vertices = [];
             var center = this.center(scale);
-            var hexSize = scale - spacing;
+            var hexSize = scale - (spacing || 0);
 
             while (++i < 6) {
                 angle = 2 * Math.PI * (2 * i - (this.pointy ? 1 : 0)) / 12;

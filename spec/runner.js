@@ -5,9 +5,11 @@ if (typeof define !== 'function') {
     GLOBAL.define = require('requirejs');
     GLOBAL.define.config({
         paths: {
-            Tile: __dirname + '/../src/Tile',
-            Map: __dirname + '/../src/Map',
             baconjs: __dirname + '../node_modules/baconjs/dist/Bacon',
+            Map: __dirname + '/../src/Map',
+            Tile: __dirname + '/../src/Tile',
+            Storage: __dirname + '/../src/Storage',
+            StorageWorker: __dirname + '/../src/StorageWorker',
         }
     });
 }
