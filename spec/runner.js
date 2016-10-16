@@ -184,17 +184,22 @@ describe('Hex', function() {
             define(['Map', 'Tile'], function(Map, Tile) {
                 var map = new Map(2); // Map with radius of 2 (width is 5).
                 var tile = new Tile(map, -1, 2);
+                var onValueCallbackCount = 0;
 
                 tile.actions.blurStream.onValue(function(event) {
+                    onValueCallbackCount++;
                     assert.equal(event.type, 'mouseout');
                 });
                 tile.actions.focusStream.onValue(function(event) {
+                    onValueCallbackCount++;
                     assert.equal(event.type, 'mouseover');
                 });
                 tile.actions.primaryStream.onValue(function(event) {
+                    onValueCallbackCount++;
                     assert.equal(event.type, 'mouseup');
                 });
                 tile.actions.secondaryStream.onValue(function(event) {
+                    onValueCallbackCount++;
                     assert.equal(event.type, 'contextmenu');
                 });
 
@@ -203,6 +208,42 @@ describe('Hex', function() {
                 tile.actions.mouseupStream.push({type: 'mouseup'})
                 tile.actions.contextmenuStream.push({type: 'contextmenu'})
 
+                assert.equal(onValueCallbackCount, 4);
+                done();
+            });
+        });
+        it('should pass events to the map', function(done) {
+            define(['Map', 'Tile'], function(Map, Tile) {
+                var map = new Map(2); // Map with radius of 2 (width is 5).
+                var tile = new Tile(map, -1, 2);
+                var onValueCallbackCount = 0;
+
+                map.actions.tileBlurStream.onValue(function(event) {
+                    onValueCallbackCount++;
+                    assert.equal(event.type, 'mouseout');
+                });
+                map.actions.tileFocusStream.onValue(function(event) {
+                    onValueCallbackCount++;
+                    assert.equal(event.type, 'mouseover');
+                });
+                map.actions.tilePrimaryStream.onValue(function(event) {
+                    onValueCallbackCount++;
+                    assert.equal(event.type, 'mouseup');
+                });
+                map.actions.tileSecondaryStream.onValue(function(event) {
+                    onValueCallbackCount++;
+                    assert.equal(event.type, 'contextmenu');
+                });
+
+                // Plugs tile events into the map.
+                tile.actions.drawStream.push(true);
+
+                tile.actions.mouseoutStream.push({type: 'mouseout'})
+                tile.actions.mouseoverStream.push({type: 'mouseover'})
+                tile.actions.mouseupStream.push({type: 'mouseup'})
+                tile.actions.contextmenuStream.push({type: 'contextmenu'})
+
+                assert.equal(onValueCallbackCount, 4);
                 done();
             });
         });
