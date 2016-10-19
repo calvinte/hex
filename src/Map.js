@@ -75,6 +75,19 @@ define([
                 origin[2] + delta[2]
             );
         },
+        computeCoordinateAtPosition: function(x, y, scale, pointy) {
+            if (pointy) {
+                return this.resolveCoordinate(
+                    Math.round((x * Math.sqrt(3) / 3 - y / 3) / scale * 2),
+                    Math.round(y * 2 / 3 / scale * 2)
+                );
+            } else {
+                return this.resolveCoordinate(
+                    Math.round(x * 2 / 3 / scale * 2),
+                    Math.round((-x / 3 + Math.sqrt(3) / 3 * y) / scale * 2)
+                );
+            }
+        },
         /**
          * Method loops over every tile in the map. This should not be used
          * unless the entire map is presented on the screen at one time.

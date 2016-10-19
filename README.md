@@ -20,3 +20,7 @@ node server.js
 
 ![Sample output](/sample/metaSample.png?raw=true "Sample output")
 
+(5) View demo: http://localhost:3000?reveal
+
+![Sample output](/sample/reveal.png?raw=true "Sample output")
+

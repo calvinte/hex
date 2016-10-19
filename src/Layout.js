@@ -40,12 +40,16 @@ define([
 
             return path;
         },
-        computeViewBox: function() {
+        computeViewBounds: function() {
             var xMultiplier, yMultiplier;
             var min = -1 * this.tileSize * (this.map.radius - 2);
             var max = -2 * min;
 
-            return min + ', ' + min + ', ' + max + ', ' + max;
+            return [min, max];
+        },
+        computeViewBox: function() {
+            var minMax = this.computeViewBounds();
+            return minMax[0] + ', ' + minMax[0] + ', ' + minMax[1] + ', ' + minMax[1];
         },
         drawTile: function(q, r, s, fn) {
             if (this.map.checkOutOfBounds(q, r, s)) {
@@ -54,6 +58,11 @@ define([
 
             var tile = this.map.getTile(q, r, s);
             this.getTileMetadata(tile, function(tileMetadata) {
+                if (tileMetadata.el) {
+                    fn();
+                    return tileMetadata;
+                }
+
                 tileMetadata.path = this.constructPath(tile.vertices(this.tileSize, this.tileSpacing));
                 tileMetadata.el = this.elements.svg.append('path')
                     .attr('d', tileMetadata.path.toString())
