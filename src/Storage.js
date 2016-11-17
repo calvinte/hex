@@ -1,4 +1,4 @@
-define([], function(worker) {
+define(['underscore'], function(_) {
     var storageWorker;
     var waitingMap = {};
 
@@ -13,6 +13,8 @@ define([], function(worker) {
                 var value = dat[1];
                 if (value) {
                     storageWorkerSpecMap[key] = value;
+                } else if (value === null) {
+                    delete storageWorkerSpecMap[key];
                 } else {
                     storageWorker.onmessage({data:[key, storageWorkerSpecMap[key]]});
                 }
@@ -34,13 +36,13 @@ define([], function(worker) {
             storageWorker.postMessage([key, null]);
         },
         getItem: function(key, fn) {
-            storageWorker.postMessage([key]);
-
             if (waitingMap[key]) {
                 waitingMap[key].push(fn);
             } else {
                 waitingMap[key] = [fn];
             }
+
+            storageWorker.postMessage([key]);
         },
         setItem: function(key, value) {
             storageWorker.postMessage([key, JSON.stringify(value)]);

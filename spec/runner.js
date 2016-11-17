@@ -248,5 +248,34 @@ describe('Hex', function() {
             });
         });
     });
+    describe('Storage', function() {
+        var key = 'spec_' + Date.now();
+        var value = Math.random().toString().slice(2);
+        it('should set item', function(done) {
+            define(['Storage'], function(Storage) {
+                Storage.setItem(key, value);
+                setTimeout(done, 4);
+            });
+        });
+        it('should get item', function(done) {
+            define(['Storage'], function(Storage) {
+                Storage.getItem(key, function(_value) {
+                    assert.equal(_value, value);
+                    done();
+                });
+            });
+        });
+        it('should clear item', function(done) {
+            define(['Storage'], function(Storage) {
+                Storage.clearItem(key);
+                setTimeout(function() {
+                    Storage.getItem(key, function(_value) {
+                        assert.equal(_value, null);
+                        done();
+                    });
+                }, 4);
+            });
+        });
+    });
 });
 
