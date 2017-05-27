@@ -2,8 +2,8 @@ var assert = require('assert');
 var _ = require('underscore');
 
 if (typeof define !== 'function') {
-    GLOBAL.define = require('requirejs');
-    GLOBAL.define.config({
+    global.define = require('requirejs');
+    global.define.config({
         paths: {
             baconjs: __dirname + '../node_modules/baconjs/dist/Bacon',
             Map: __dirname + '/../src/Map',
