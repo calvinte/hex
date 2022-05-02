@@ -1,8 +1,8 @@
 define([
-    'baconjs',
-    'Storage'
-], function(Bacon, Storage) {
+    'baconjs'
+], function(Bacon) {
     function Tile(map, q, r, s) {
+        this.attributes = {};
         this.map = map;
         this.coordinate = this.map.resolveCoordinate(q, r, s);
 

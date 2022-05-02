@@ -150,96 +150,46 @@ define([
 
             if (this.checkOutOfBounds.apply(this, position)) {
                 resolution = [null, null, null];
-
-                if (position[0] < -this.radius && position[1] > this.radius) {
-                    // [MIN, MAX, X]
-                    resolution[0] = position[0] + this.radius * 2 + 1;
-                    resolution[1] = position[1] + this.radius * -1 - 1;
-                } else if (position[0] < -this.radius && position[2] > this.radius) {
-                    // [MIN, X, MAX]
-                    resolution[0] = position[0] + this.radius + 1;
-                    resolution[2] = position[2] + this.radius * -2 - 1;
-                } else if (position[0] > this.radius && position[1] < -this.radius) {
-                    // [MAX, MIN, X]
-                    resolution[0] = position[0] + this.radius * -2 - 1;
-                    resolution[1] = position[1] + this.radius + 1;
-                } else if (position[1] < -this.radius && position[2] > this.radius) {
-                    // [X, MIN, MAX]
-                    resolution[1] = position[1] + this.radius * 2 + 1;
-                    resolution[2] = position[2] + this.radius * -1 - 1;
-                } else if (position[2] < -this.radius && position[0] > this.radius) {
-                    // [MAX, X, MIN]
-                    resolution[0] = position[0] + this.radius * -1 - 1;
-                    resolution[2] = position[2] + this.radius * 2 + 1;
-                } else if (position[2] < -this.radius && position[1] > this.radius) {
-                    // [X, MAX, MIN]
-                    resolution[1] = position[1] + this.radius * -2 - 1;
-                    resolution[2] = position[2] + this.radius + 1;
-                } else if (position[0] > this.radius) {
-                    // [MAX, X, X]
-                    resolution[0] = position[0] + this.radius * -2 - 1;
-                    isSingleAxisTranslation = true;
-                } else if (position[0] < -this.radius) {
-                    // [MIN, X, X]
-                    resolution[0] = position[0] + this.radius * 2 + 1;
-                    isSingleAxisTranslation = true;
-                } else if (position[1] > this.radius) {
-                    // [X, MAX, X]
-                    resolution[1] = position[1] + this.radius * -2 - 1;
-                    isSingleAxisTranslation = true;
-                } else if (position[1] < -this.radius) {
-                    // [X, MIN, X]
-                    resolution[1] = position[1] + this.radius * 2 + 1;
-                    isSingleAxisTranslation = true;
-                } else if (position[2] > this.radius) {
-                    // [X, X, MAX]
-                    resolution[2] = position[2] + this.radius * -2 - 1;
-                    isSingleAxisTranslation = true;
-                } else if (position[2] < -this.radius) {
-                    // [X, X, MIN]
-                    resolution[2] = position[2] + this.radius * 2 + 1;
-                    isSingleAxisTranslation = true;
+                if (Math.abs(position[0]) >= this.radius && Math.abs(position[1]) >= this.radius) {
+                    resolution = [
+                        -position[0] + (position[0] > 0 ? 1 : -1),
+                        -position[1] + (position[1] > 0 ? 1 : -1),
+                        -position[2] + (position[0] > 0 ? -1 : 1) + (position[1] > 0 ? -1 : 1),
+                    ];
+                } else if (Math.abs(position[0]) >= this.radius && Math.abs(position[2]) >= this.radius) {
+                    resolution = [
+                        -position[0] + (position[0] > 0 ? 1 : -1),
+                        -position[1] + (position[0] > 0 ? -1 : 1) + (position[2] > 0 ? -1 : 1),
+                        -position[2] + (position[2] > 0 ? 1 : -1),
+                    ];
+                } else if (Math.abs(position[1]) >= this.radius && Math.abs(position[2]) >= this.radius) {
+                    resolution = [
+                        -position[0] + (position[1] > 0 ? -1 : 1) + (position[2] > 0 ? -1 : 1),
+                        -position[1] + (position[1] > 0 ? 1 : -1),
+                        -position[2] + (position[2] > 0 ? 1 : -1),
+                    ];
+                } else if (Math.abs(position[0]) > this.radius) {
+                    resolution = [
+                        -position[0] + (position[0] > 0 ? 1 : -1),
+                        -position[1] + (position[0] > 0 ? -1 : 1),
+                        -position[2],
+                    ];
+                } else if (Math.abs(position[1]) > this.radius) {
+                    resolution = [
+                        -position[0] + (position[1] > 0 ? -1 : 1),
+                        -position[1] + (position[1] > 0 ? 1 : -1),
+                        -position[2],
+                    ];
+                } else if (Math.abs(position[2]) > this.radius) {
+                    resolution = [
+                        -position[0],
+                        -position[1] + (position[2] > 0 ? -1 : 1),
+                        -position[2] + (position[2] > 0 ? 1 : -1),
+                    ];
                 }
             }
 
-            if (isSingleAxisTranslation) {
-                // Only one axis was out of bounds.
-                if (resolution[0] !== null && resolution[0] > 0) {
-                    return this.resolveCoordinate(
-                        resolution[0],
-                        position[1] + this.radius * 2 + 1
-                    );
-                } else if (resolution[0] !== null) {
-                    return this.resolveCoordinate(
-                        resolution[0],
-                        position[1] - this.radius * -2 - 1
-                    );
-                } else if (resolution[1] !== null && resolution[1] > 0) {
-                    return this.resolveCoordinate(
-                        null,
-                        resolution[1],
-                        position[2] + this.radius * -2 + 1
-                    );
-                } else if (resolution[1] !== null) {
-                    return this.resolveCoordinate(
-                        null,
-                        resolution[1],
-                        position[2] + this.radius + 1
-                    );
-                } else if (resolution[2] !== null && resolution[2] > 0) {
-                    return this.resolveCoordinate(
-                        null,
-                        position[1] + this.radius * -1,
-                        resolution[2]
-                    );
-                } else if (resolution[2] !== null) {
-                    return this.resolveCoordinate(
-                        null,
-                        position[1] + this.radius,
-                        resolution[2]
-                    );
-                }
-            } else if (resolution !== null) {
+            if (resolution !== null) {
                 // Two axis out of bounds.
                 return this.resolveCoordinate.apply(this, resolution);
             } else {

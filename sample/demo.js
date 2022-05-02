@@ -15,16 +15,9 @@ require([
     var layout = new Layout(map, wrapper);
     var waitingToDraw = 0;
     map.forEachCoordinate(function(q, r, s) {
-        waitingToDraw++;
-        layout.drawTile(q, r, s, function() {
-            waitingToDraw--;
-            if (!waitingToDraw) {
-                // Note: we've created the svg (all layout logic) without yet
-                // modifying the dom. Now we request a frame, then append.
-                addMapToDom();
-            }
-        })
+        layout.drawTile(q, r, s)
     });
+    addMapToDom();
 
     map.actions.tileFocusStream.onValue(function(event) {
         event.target.setAttribute('stroke', 'black');

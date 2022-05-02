@@ -51,58 +51,52 @@ define([
             var minMax = this.computeViewBounds();
             return minMax[0] + ', ' + minMax[0] + ', ' + minMax[1] + ', ' + minMax[1];
         },
-        drawTile: function(q, r, s, fn) {
+        drawTile: function(q, r, s) {
             if (this.map.checkOutOfBounds(q, r, s)) {
                 return null;
             }
 
             var tile = this.map.getTile(q, r, s);
-            this.getTileMetadata(tile, function(tileMetadata) {
-                if (tileMetadata.el) {
-                    fn();
-                    return tileMetadata;
-                }
+            var tileAttributes = this.getTileAttributes(tile);
+            if (tileAttributes.el) {
+                return tileAttributes;
+            }
 
-                tileMetadata.path = this.constructPath(tile.vertices(this.tileSize, this.tileSpacing));
-                tileMetadata.el = this.elements.svg.append('path')
-                    .attr('d', tileMetadata.path.toString())
-                    .attr('fill', '#F0F')
-                    .attr('stroke', 'transparent')
-                    .attr('stroke-alignment', 'inner')
-                    .attr('stroke-location', 'inside')
-                    .attr('stroke-width', '4')
-                    .node();
+            tileAttributes.path = this.constructPath(tile.vertices(this.tileSize, this.tileSpacing));
+            tileAttributes.el = this.elements.svg.append('path')
+                .attr('d', tileAttributes.path.toString())
+                .attr('fill', '#F0F')
+                .attr('stroke', 'transparent')
+                .attr('stroke-alignment', 'inner')
+                .attr('stroke-location', 'inside')
+                .attr('stroke-width', '4')
+                .node();
 
-                tile.actions.drawStream.onValue(function bindEventsToElement(el) {
-                    el.addEventListener('contextmenu', tile.actions.contextmenuStream.push.bind(tile.actions.contextmenuStream));
-                    el.addEventListener('touchend', tile.actions.touchendStream.push.bind(tile.actions.touchendStream));
-                    el.addEventListener('touchstart', tile.actions.touchstartStream.push.bind(tile.actions.touchstartStream));
-                    el.addEventListener('mouseout', tile.actions.mouseoutStream.push.bind(tile.actions.mouseoutStream));
-                    el.addEventListener('mouseover', tile.actions.mouseoverStream.push.bind(tile.actions.mouseoverStream));
-                    el.addEventListener('mouseup', tile.actions.mouseupStream.push.bind(tile.actions.mouseupStream));
-                });
-
-                tile.actions.undrawStream.onValue(function unbindEventsToElement(el) {
-                    el.removeEventListener('contextmenu', tile.actions.contextmenuStream.push.bind(tile.actions.contextmenuStream));
-                    el.removeEventListener('touchend', tile.actions.touchendStream.push.bind(tile.actions.touchendStream));
-                    el.removeEventListener('touchstart', tile.actions.touchstartStream.push.bind(tile.actions.touchstartStream));
-                    el.removeEventListener('mouseout', tile.actions.mouseoutStream.push.bind(tile.actions.mouseoutStream));
-                    el.removeEventListener('mouseover', tile.actions.mouseoverStream.push.bind(tile.actions.mouseoverStream));
-                    el.removeEventListener('mouseup', tile.actions.mouseupStream.push.bind(tile.actions.mouseupStream));
-                });
-
-                tile.actions.drawStream.push(tileMetadata.el);
-
-                fn();
-                return tileMetadata;
+            tile.actions.drawStream.onValue(function bindEventsToElement(el) {
+                el.addEventListener('contextmenu', tile.actions.contextmenuStream.push.bind(tile.actions.contextmenuStream));
+                el.addEventListener('touchend', tile.actions.touchendStream.push.bind(tile.actions.touchendStream));
+                el.addEventListener('touchstart', tile.actions.touchstartStream.push.bind(tile.actions.touchstartStream));
+                el.addEventListener('mouseout', tile.actions.mouseoutStream.push.bind(tile.actions.mouseoutStream));
+                el.addEventListener('mouseover', tile.actions.mouseoverStream.push.bind(tile.actions.mouseoverStream));
+                el.addEventListener('mouseup', tile.actions.mouseupStream.push.bind(tile.actions.mouseupStream));
             });
+
+            tile.actions.undrawStream.onValue(function unbindEventsToElement(el) {
+                el.removeEventListener('contextmenu', tile.actions.contextmenuStream.push.bind(tile.actions.contextmenuStream));
+                el.removeEventListener('touchend', tile.actions.touchendStream.push.bind(tile.actions.touchendStream));
+                el.removeEventListener('touchstart', tile.actions.touchstartStream.push.bind(tile.actions.touchstartStream));
+                el.removeEventListener('mouseout', tile.actions.mouseoutStream.push.bind(tile.actions.mouseoutStream));
+                el.removeEventListener('mouseover', tile.actions.mouseoverStream.push.bind(tile.actions.mouseoverStream));
+                el.removeEventListener('mouseup', tile.actions.mouseupStream.push.bind(tile.actions.mouseupStream));
+            });
+
+            tile.actions.drawStream.push(tileAttributes.el);
+            return tileAttributes;
         },
-        getTileMetadata: function(tile, fn) {
-            tile.getMetadata(function(tileMetadata) {
-                tileMetadata['_hex_layout_' + this.layoutIdx] = tileMetadata['_hex_layout_' + this.layoutIdx] || {};
-                tileMetadata['_hex_layout_' + this.layoutIdx] = fn.call(this, tileMetadata['_hex_layout_' + this.layoutIdx]) || tileMetadata['_hex_layout_' + this.layoutIdx];
-                return tileMetadata;
-            }.bind(this));
+        getTileAttributes: function(tile) {
+            var key = '_hex_layout_' + this.layoutIdx;
+            tile.attributes[key] = tile.attributes[key] || {};
+            return tile.attributes[key];
         },
         tileSize: 50,
         tileSpacing: 2,
