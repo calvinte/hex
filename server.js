@@ -9,7 +9,7 @@ app.use(express.static('node_modules'));
 
 app.get('/', function(req, res) {
     var query = Url.parse(req.url).query;
-    if (query.indexOf('reveal') > -1) {
+    if (query && query.indexOf('reveal') > -1) {
         res.status(200).send(fs.readFileSync('sample/reveal.html', 'utf8'));
     } else {
         res.status(200).send(fs.readFileSync('sample/demo.html', 'utf8'));

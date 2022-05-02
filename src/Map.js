@@ -159,7 +159,7 @@ define([
                     // [MIN, X, MAX]
                     resolution[0] = position[0] + this.radius + 1;
                     resolution[2] = position[2] + this.radius * -2 - 1;
-                } else if (position[1] < -this.radius && position[0] > this.radius) {
+                } else if (position[0] > this.radius && position[1] < -this.radius) {
                     // [MAX, MIN, X]
                     resolution[0] = position[0] + this.radius * -2 - 1;
                     resolution[1] = position[1] + this.radius + 1;
@@ -207,7 +207,7 @@ define([
                 if (resolution[0] !== null && resolution[0] > 0) {
                     return this.resolveCoordinate(
                         resolution[0],
-                        position[1] + this.radius * -2 + 1
+                        position[1] + this.radius * 2 + 1
                     );
                 } else if (resolution[0] !== null) {
                     return this.resolveCoordinate(
