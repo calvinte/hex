@@ -33,11 +33,11 @@ require([
         layout.drawTile(coordinate[0], coordinate[1], coordinate[2], function() {});
     });
 
-    map.actions.tileFocusStream.onValue(function(event) {
+    map.actions.tileFocusStream.onValues(function(event) {
         event.target.setAttribute('stroke', 'black');
     });
 
-    map.actions.tileBlurStream.onValue(function(event) {
+    map.actions.tileBlurStream.onValues(function(event) {
         event.target.setAttribute('stroke', 'transparent');
     });
 

@@ -51,6 +51,11 @@ define([
             var minMax = this.computeViewBounds();
             return minMax[0] + ', ' + minMax[0] + ', ' + minMax[1] + ', ' + minMax[1];
         },
+        pushTileActionHandlerFactory: function(stream, tile) {
+            return function(event) {
+                stream.push([event, tile]);
+            }
+        },
         drawTile: function(q, r, s) {
             if (this.map.checkOutOfBounds(q, r, s)) {
                 return null;
@@ -72,26 +77,33 @@ define([
                 .attr('stroke-width', '4')
                 .node();
 
+            var contextmenuHandler = this.pushTileActionHandlerFactory(tile.actions.contextmenuStream, tile);
+            var touchendHandler = this.pushTileActionHandlerFactory(tile.actions.touchendStream, tile);
+            var touchstartHandler = this.pushTileActionHandlerFactory(tile.actions.touchstartStream, tile);
+            var mouseoutHandler = this.pushTileActionHandlerFactory(tile.actions.mouseoutStream, tile);
+            var mouseoverHandler = this.pushTileActionHandlerFactory(tile.actions.mouseoverStream, tile);
+            var mouseupHandler = this.pushTileActionHandlerFactory(tile.actions.mouseupStream, tile);
+
             tile.actions.drawStream.onValue(function bindEventsToElement(el) {
-                el.addEventListener('contextmenu', tile.actions.contextmenuStream.push.bind(tile.actions.contextmenuStream));
-                el.addEventListener('touchend', tile.actions.touchendStream.push.bind(tile.actions.touchendStream));
-                el.addEventListener('touchstart', tile.actions.touchstartStream.push.bind(tile.actions.touchstartStream));
-                el.addEventListener('mouseout', tile.actions.mouseoutStream.push.bind(tile.actions.mouseoutStream));
-                el.addEventListener('mouseover', tile.actions.mouseoverStream.push.bind(tile.actions.mouseoverStream));
-                el.addEventListener('mouseup', tile.actions.mouseupStream.push.bind(tile.actions.mouseupStream));
+                el.addEventListener('contextmenu', contextmenuHandler);
+                el.addEventListener('touchend', touchendHandler);
+                el.addEventListener('touchstart', touchstartHandler);
+                el.addEventListener('mouseout', mouseoutHandler);
+                el.addEventListener('mouseover', mouseoverHandler);
+                el.addEventListener('mouseup', mouseupHandler);
             });
 
             tile.actions.undrawStream.onValue(function unbindEventsToElement(el) {
-                el.removeEventListener('contextmenu', tile.actions.contextmenuStream.push.bind(tile.actions.contextmenuStream));
-                el.removeEventListener('touchend', tile.actions.touchendStream.push.bind(tile.actions.touchendStream));
-                el.removeEventListener('touchstart', tile.actions.touchstartStream.push.bind(tile.actions.touchstartStream));
-                el.removeEventListener('mouseout', tile.actions.mouseoutStream.push.bind(tile.actions.mouseoutStream));
-                el.removeEventListener('mouseover', tile.actions.mouseoverStream.push.bind(tile.actions.mouseoverStream));
-                el.removeEventListener('mouseup', tile.actions.mouseupStream.push.bind(tile.actions.mouseupStream));
+                el.removeEventListener('contextmenu', contextmenuHandler);
+                el.removeEventListener('touchend', touchendHandler);
+                el.removeEventListener('touchstart', touchstartHandler);
+                el.removeEventListener('mouseout', mouseoutHandler);
+                el.removeEventListener('mouseover', mouseoverHandler);
+                el.removeEventListener('mouseup', mouseupHandler);
             });
 
             tile.actions.drawStream.push(tileAttributes.el);
-            return tileAttributes;
+            return tile;
         },
         getTileAttributes: function(tile) {
             var key = '_hex_layout_' + this.layoutIdx;
